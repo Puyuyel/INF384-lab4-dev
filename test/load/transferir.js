@@ -5,8 +5,6 @@ const BASE = (__ENV.BASE_URL || '').replace(/\/$/, '');
 const SLO_P95 = Number(__ENV.SLO_P95 || 500);
 const USUARIOS = ['ana', 'beto', 'carla', 'diego', 'elena'];
 
-http.setResponseCallback(http.expectedStatuses(200, 400));
-
 export const options = {
   stages: [
     { duration: '1m', target: 30 },
@@ -34,7 +32,7 @@ export default function () {
     JSON.stringify({ origen, destino, monto: 1 }),
     { headers: { 'content-type': 'application/json' }, tags: { endpoint: 'transferir' } },
   );
-  check(t, { 'transferir 200 o 400': (r) => r.status === 200 || r.status === 400 });
+  check(t, { 'transferir 200': (r) => r.status === 200 });
 
   const s = http.get(`${BASE}/saldo/${origen}`, { tags: { endpoint: 'saldo' } });
   check(s, { 'saldo 200': (r) => r.status === 200 });
