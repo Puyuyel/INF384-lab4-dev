@@ -49,12 +49,15 @@ jobs:
   sast:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
+      - if: github.event_name == 'pull_request'
+        uses: actions/checkout@v7
 
       - name: Instalar semgrep
+        if: github.event_name == 'pull_request'
         run: pipx install semgrep==1.182.1
 
       - name: Semgrep
+        if: github.event_name == 'pull_request'
         env:
           SEMGREP_SEND_METRICS: 'off'
         run: |
